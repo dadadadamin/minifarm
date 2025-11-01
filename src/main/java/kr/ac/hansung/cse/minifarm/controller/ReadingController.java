@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-
 @RestController @RequestMapping("/readings") @RequiredArgsConstructor
 public class ReadingController {
     private final ReadingService readingService;
