@@ -8,9 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS devices (
                                        id BIGSERIAL PRIMARY KEY,
-                                       device_uid TEXT NOT NULL UNIQUE,
-                                       name TEXT NOT NULL,
-                                       location TEXT,
+                                       device_uid TEXT NOT                                       location TEXT,
                                        is_online BOOLEAN DEFAULT FALSE,
                                        owner_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                                        created_at TIMESTAMPTZ DEFAULT now()
