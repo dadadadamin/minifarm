@@ -40,6 +40,8 @@ public class PlantInfoService {
                 .tempMax(p.getTempMax())
                 .humidityMin(p.getHumidityMin())
                 .humidityMax(p.getHumidityMax())
+                .co2Min(p.getCo2Min())
+                .co2Max(p.getCo2Max())
                 .lightLevel(p.getLightLevel())
                 // 아직 컬럼 없으면 null / 기본 텍스트
                 .ledInfo("기본 LED 정보")
