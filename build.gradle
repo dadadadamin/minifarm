@@ -38,6 +38,8 @@ dependencies {
     implementation 'org.flywaydb:flyway-database-postgresql'
     implementation 'io.github.cdimascio:dotenv-java:3.0.0'
     implementation 'com.openai:openai-java:4.8.0'
+    implementation 'org.springframework.integration:spring-integration-mqtt'
+    implementation 'org.springframework.integration:spring-integration-core'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'

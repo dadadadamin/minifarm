@@ -25,6 +25,10 @@ public class PlantInfoResponse {
     private Double humidityMin;
     private Double humidityMax;
 
+    //적정 co2
+    private Double co2Min;
+    private Double co2Max;
+
     // 적정 조도 (우선은 텍스트로)
     private String lightLevel;
 
