@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 
-// Calendaㄱ용 Day DTO
+// Calendar용 Day DTO
 @Getter
 @Builder
 public class DiaryCalendarDayDto {

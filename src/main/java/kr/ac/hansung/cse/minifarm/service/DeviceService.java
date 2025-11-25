@@ -1,7 +1,7 @@
 // src/main/java/kr/ac/hansung/cse/minifarm/service/DeviceService.java
 package kr.ac.hansung.cse.minifarm.service;
 
-import kr.ac.hansung.cse.minifarm.dto.device.DeviceCardResponse;
+import kr.ac.hansung.cse.minifarm.dto.DeviceCardResponse;
 import kr.ac.hansung.cse.minifarm.entity.Device;
 import kr.ac.hansung.cse.minifarm.repository.DeviceRepository;
 import lombok.RequiredArgsConstructor;

@@ -10,6 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "minifarm.mqtt")
 public class MqttProperties {
 
+    private String username;
+    private String password;
+
     //브로커 URL 예: tcp://localhost:1883
     private String brokerUrl;
 

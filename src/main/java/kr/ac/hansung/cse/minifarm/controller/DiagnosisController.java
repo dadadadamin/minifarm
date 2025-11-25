@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class DiagnosisController {
 
     private final DiagnosisService diagnosisService;
-
+/*
     // 1) 라즈베리파이 촬영 요청
     @PostMapping("/device/request")
     public DeviceDiagnosisRequestResponse requestDeviceDiagnosis(
@@ -29,7 +29,7 @@ public class DiagnosisController {
     ) {
         return diagnosisService.getDeviceDiagnosisResult(requestId);
     }
-
+*/
     // 3) 모바일 카메라로 바로 업로드하여 진단
     @PostMapping(
             value = "/mobile",

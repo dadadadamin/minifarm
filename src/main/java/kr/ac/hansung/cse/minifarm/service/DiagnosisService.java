@@ -20,16 +20,18 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+//라즈베리파이 달려있는 카메라통신-통신불가시 핸드폰카메라로 촬영하여 진단 플로우로 가려했으나
+//단계가 너무 복잡해 그냥 카메라로 사진까지 같이 넘겨받으면 진단으로
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class DiagnosisService {
 
     // 타임아웃 기준 (초)
-    private static final int DEVICE_TIMEOUT_SEC = 10;
+    //private static final int DEVICE_TIMEOUT_SEC = 10;
 
     private final UserPlantRepository userPlantRepository;
-    private final DeviceCaptureRequestRepository deviceCaptureRequestRepository;
+    //private final DeviceCaptureRequestRepository deviceCaptureRequestRepository;
     private final DiagnosisRepository diagnosisRepository;
     private final AiVisionClient aiVisionClient;
 
@@ -42,6 +44,76 @@ public class DiagnosisService {
         return fakeUrl;
     }
 
+    // 4. 모바일 카메라로 바로 업로드하여 진단
+    public DiagnosisResponse analyzeFromMobile(
+            Long userPlantId,
+            MultipartFile imageFile,
+            String symptomNote
+    ) {
+        UserPlant userPlant = userPlantRepository.findById(userPlantId)
+                .orElseThrow(() -> new IllegalArgumentException("userPlant not found: " + userPlantId));
+
+        String imageUrl = saveImageAndGetUrl(imageFile, "mobile");
+
+        Diagnosis diagnosis = createAndSaveDiagnosis(
+                userPlant,
+                imageFile,
+                imageUrl,
+                symptomNote,
+                DiagnosisSource.MOBILE
+        );
+
+        return mapToDiagnosisResponse(diagnosis);
+    }
+
+    // 실제 Diagnosis 엔티티 생성 + 저장 공통 부분
+    private Diagnosis createAndSaveDiagnosis(
+            UserPlant userPlant,
+            MultipartFile imageFile,
+            String imageUrl,
+            String symptomNote,
+            DiagnosisSource source
+    ) {
+        // 1) AI 분석 (Vision 호출)
+        DiagnosisResponse aiResult = aiVisionClient.analyze(
+                userPlant,
+                imageFile,
+                imageUrl,
+                symptomNote,
+                source
+        );
+
+        // 2) 엔티티로 저장
+        Diagnosis diagnosis = Diagnosis.builder()
+                .userPlant(userPlant)
+                .imageUrl(imageUrl)
+                .healthSummary(aiResult.getHealthSummary())
+                .diseaseStatus(aiResult.getDiseaseStatus())
+                .diseaseDetails(aiResult.getDiseaseDetails())
+                .advice(aiResult.getAdvice())
+                .harvestPredictionDate(aiResult.getHarvestPredictionDate())
+                .sourceType(source.name())
+                .build();
+
+        diagnosisRepository.save(diagnosis);
+        return diagnosis;
+    }
+
+    private DiagnosisResponse mapToDiagnosisResponse(Diagnosis d) {
+        return DiagnosisResponse.builder()
+                .id(d.getId())
+                .userPlantId(d.getUserPlant().getId())
+                .imageUrl(d.getImageUrl())
+                .healthSummary(d.getHealthSummary())
+                .diseaseStatus(d.getDiseaseStatus())
+                .diseaseDetails(d.getDiseaseDetails())
+                .advice(d.getAdvice())
+                .harvestPredictionDate(d.getHarvestPredictionDate())
+                .sourceType(d.getSourceType())
+                .createdAt(d.getCreatedAt())
+                .build();
+    }
+/*
     // 1. 모바일 → 라즈베리파이 촬영 요청
     public DeviceDiagnosisRequestResponse requestDeviceDiagnosis(DeviceDiagnosisRequestDto dto) {
         UserPlant userPlant = userPlantRepository.findById(dto.getUserPlantId())
@@ -166,74 +238,7 @@ public class DiagnosisService {
                 .diagnosis(dto)
                 .build();
     }
+*/
 
-    // 4. 모바일 카메라로 바로 업로드하여 진단
-    public DiagnosisResponse analyzeFromMobile(
-            Long userPlantId,
-            MultipartFile imageFile,
-            String symptomNote
-    ) {
-        UserPlant userPlant = userPlantRepository.findById(userPlantId)
-                .orElseThrow(() -> new IllegalArgumentException("userPlant not found: " + userPlantId));
 
-        String imageUrl = saveImageAndGetUrl(imageFile, "mobile");
-
-        Diagnosis diagnosis = createAndSaveDiagnosis(
-                userPlant,
-                imageFile,
-                imageUrl,
-                symptomNote,
-                DiagnosisSource.MOBILE
-        );
-
-        return mapToDiagnosisResponse(diagnosis);
-    }
-
-    // 실제 Diagnosis 엔티티 생성 + 저장 공통 부분
-    private Diagnosis createAndSaveDiagnosis(
-            UserPlant userPlant,
-            MultipartFile imageFile,
-            String imageUrl,
-            String symptomNote,
-            DiagnosisSource source
-    ) {
-        // 1) AI 분석 (Vision 호출)
-        DiagnosisResponse aiResult = aiVisionClient.analyze(
-                userPlant,
-                imageFile,
-                imageUrl,
-                symptomNote,
-                source
-        );
-
-        // 2) 엔티티로 저장
-        Diagnosis diagnosis = Diagnosis.builder()
-                .userPlant(userPlant)
-                .imageUrl(imageUrl)
-                .healthSummary(aiResult.getHealthSummary())
-                .diseaseStatus(aiResult.getDiseaseStatus())
-                .diseaseDetails(aiResult.getDiseaseDetails())
-                .advice(aiResult.getAdvice())
-                .harvestPredictionDate(aiResult.getHarvestPredictionDate())
-                .sourceType(source.name())
-                .build();
-
-        diagnosisRepository.save(diagnosis);
-        return diagnosis;
-    }
-
-    private DiagnosisResponse mapToDiagnosisResponse(Diagnosis d) {
-        return DiagnosisResponse.builder()
-                .id(d.getId())
-                .userPlantId(d.getUserPlant().getId())
-                .imageUrl(d.getImageUrl())
-                .healthSummary(d.getHealthSummary())
-                .diseaseStatus(d.getDiseaseStatus())
-                .diseaseDetails(d.getDiseaseDetails())
-                .advice(d.getAdvice())
-                .harvestPredictionDate(d.getHarvestPredictionDate())
-                .sourceType(d.getSourceType())
-                .createdAt(d.getCreatedAt())
-                .build();
-    }
 }

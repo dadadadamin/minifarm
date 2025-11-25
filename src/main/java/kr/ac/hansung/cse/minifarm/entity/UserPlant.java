@@ -6,22 +6,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
-// *******참조키 많으므로 수정시 주의!!!*********
+//참조키 많으므로 수정시 주의!!!
 // user_plants 테이블과 매핑되는 엔티티
 //사용자가 실제로 기르기로 선택한 "내 식물(내 화분)" 정보
-//한 식물당 하나의 장치(Device)에 연결 (1:1 관계)
 @Entity
-@Table(
-        name = "user_plants",
-        uniqueConstraints = {
-                // 각 device는 하나의 user_plant에만 연결되도록 1:1 제약
-                // 추후 정책 변경 시 조정
-                @UniqueConstraint(
-                        name = "uq_user_plants_device",
-                        columnNames = "device_id"
-                )
-        }
-)
+@Table(name = "user_plants")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,13 +34,6 @@ public class UserPlant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plant_info_id")
     private PlantInfo plantInfo;
-
-    //이 화분에 연결된 장치 (라즈베리파이)
-    //devices.id FK
-    //NOT NULL + UNIQUE → 식물 1개당 장치 1개
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_id", nullable = false)
-    private Device device;
 
     //사용자가 이 식물에 붙인 별칭-예: "베란다 토마토 1"
     @Column(length = 100)

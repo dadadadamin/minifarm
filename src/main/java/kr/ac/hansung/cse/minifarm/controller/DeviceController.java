@@ -1,7 +1,7 @@
 // src/main/java/kr/ac/hansung/cse/minifarm/controller/DeviceController.java
 package kr.ac.hansung.cse.minifarm.controller;
 
-import kr.ac.hansung.cse.minifarm.dto.device.DeviceCardResponse;
+import kr.ac.hansung.cse.minifarm.dto.DeviceCardResponse;
 import kr.ac.hansung.cse.minifarm.service.DeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

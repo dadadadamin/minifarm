@@ -1,5 +1,5 @@
 // src/main/java/kr/ac/hansung/cse/minifarm/dto/device/DeviceCardResponse.java
-package kr.ac.hansung.cse.minifarm.dto.device;
+package kr.ac.hansung.cse.minifarm.dto;
 
 import lombok.Builder;
 import lombok.Getter;
