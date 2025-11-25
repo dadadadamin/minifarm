@@ -24,9 +24,14 @@ public class SensorLog {
 
     //어느 장치에서 수집된 센서 데이터인지
     //devices.id FK
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "device_id", nullable = false)
+    //private Device device;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_id", nullable = false)
-    private Device device;
+    @JoinColumn(name = "user_plant_id", nullable = false)
+    private UserPlant userPlant;
+
 
     //온도 (°C) 예: 23.5
     @Column(name = "temperature")

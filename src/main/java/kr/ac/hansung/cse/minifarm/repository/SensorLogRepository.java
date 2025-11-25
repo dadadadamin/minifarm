@@ -11,13 +11,12 @@ import java.util.Optional;
 
 public interface SensorLogRepository extends JpaRepository<SensorLog, Long> {
 
-    // 특정 기기의 가장 최근 로그 1건
-    Optional<SensorLog> findFirstByDevice_IdOrderByCreatedAtDesc(Long deviceId);
+    Optional<SensorLog> findFirstByUserPlant_IdOrderByCreatedAtDesc(Long userPlantId);
 
-    // 특정 기기의 지정 구간 로그 (시간 오름차순)
-    List<SensorLog> findByDevice_IdAndCreatedAtBetweenOrderByCreatedAtAsc(
-            Long deviceId,
+    List<SensorLog> findByUserPlant_IdAndCreatedAtBetweenOrderByCreatedAtAsc(
+            Long userPlantId,
             LocalDateTime from,
             LocalDateTime to
     );
+
 }

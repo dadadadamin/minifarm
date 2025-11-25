@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class Last24hResponse {
 
-    private Long deviceId;
+    private Long userPlantId;
     private LocalDateTime from;
     private LocalDateTime to;
     private Integer intervalMinutes;   // 지금은 10분 고정이라고 가정

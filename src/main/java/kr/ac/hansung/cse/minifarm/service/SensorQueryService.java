@@ -23,12 +23,12 @@ public class SensorQueryService {
     /**
      * 특정 device 의 최근 24시간 센서 데이터 조회
      */
-    public Last24hResponse getLast24Hours(Long deviceId) {
+    public Last24hResponse getLast24Hours(Long userPlantId) {
         LocalDateTime now = LocalDateTime.now();      // KST 기준
         LocalDateTime from = now.minusHours(24);
 
         List<SensorLog> logs = sensorLogRepository
-                .findByDevice_IdAndCreatedAtBetweenOrderByCreatedAtAsc(deviceId, from, now);
+                .findByUserPlant_IdAndCreatedAtBetweenOrderByCreatedAtAsc(userPlantId, from, now);
 
         Last24hResponse.Series tempSeries = buildSeries(logs, "°C", SensorLog::getTemperature);
         Last24hResponse.Series humSeries  = buildSeries(logs, "%",  SensorLog::getHumidity);
@@ -37,7 +37,7 @@ public class SensorQueryService {
         Last24hResponse.Series ecSeries   = buildSeries(logs, "mS/cm",SensorLog::getEc);
 
         return Last24hResponse.builder()
-                .deviceId(deviceId)
+                .userPlantId(userPlantId)
                 .from(from)
                 .to(now)
                 .intervalMinutes(10) // 10분 간격 수집 기준
@@ -76,5 +76,11 @@ public class SensorQueryService {
                 .unit(unit)
                 .points(points)
                 .build();
+    }
+
+    // 가장 최신 센서 데이터 1건 조회
+    public SensorLog getLatest(Long userPlantId) {
+        return sensorLogRepository.findFirstByUserPlant_IdOrderByCreatedAtDesc(userPlantId)
+                .orElse(null);
     }
 }

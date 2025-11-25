@@ -37,8 +37,8 @@ public class TelemetryMessageHandler {
             TelemetryMessage telemetry =
                     objectMapper.readValue(payload, TelemetryMessage.class);
 
-            if (telemetry.getDeviceId() == null) {
-                log.warn("[MQTT] deviceId 가 없는 메시지입니다. payload={}", payload);
+            if (telemetry.getUserPlantId() == null) {
+                log.warn("[MQTT] userPlatnId 가 없는 메시지입니다. payload={}", payload);
                 return;
             }
 
@@ -56,7 +56,7 @@ public class TelemetryMessageHandler {
      * 라즈베리파이에서 보내는 JSON 형태
      *
      * {
-     *   "deviceId": 3,
+     *   "userPlantId": 5,
      *   "measuredAt": "2025-03-26T15:40:00+09:00",
      *   "metrics": {
      *     "temperature": 22.0,
@@ -70,18 +70,17 @@ public class TelemetryMessageHandler {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class TelemetryMessage {
 
-        private Long deviceId;
+        private Long userPlantId;
         private String measuredAt;   // 지금은 안 쓰고, 필요하면 나중에 LocalDateTime 으로 파싱
         private Metrics metrics;
 
-        public Long getDeviceId() {
-            return deviceId;
+        public Long getUserPlantId() {
+            return userPlantId;
         }
 
-        public void setDeviceId(Long deviceId) {
-            this.deviceId = deviceId;
+        public void setUserPlantId(Long userPlantId) {
+            this.userPlantId = userPlantId;
         }
-
         public String getMeasuredAt() {
             return measuredAt;
         }
