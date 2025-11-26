@@ -2,15 +2,15 @@
 CREATE SCHEMA IF NOT EXISTS public;
 SET search_path TO public;
 -- 사용자 테이블
-CREATE TABLE IF NOT EXISTS users (
-                                     id          BIGSERIAL PRIMARY KEY,
-                                     email       VARCHAR(255) NOT NULL UNIQUE,
-                                     password    VARCHAR(255) NOT NULL,
-                                     nickname    VARCHAR(100) NOT NULL,
-                                     job         VARCHAR(100),
-                                     age         INTEGER,
-                                     gender      VARCHAR(20),
-                                     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE users (
+                       id          BIGSERIAL PRIMARY KEY,
+                       email       VARCHAR(255) NOT NULL UNIQUE,
+                       password    VARCHAR(255) NOT NULL,
+                       nickname    VARCHAR(100) NOT NULL,
+                       job         VARCHAR(100),
+                       age         INTEGER,
+                       gender      VARCHAR(20),
+                       created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 식물 별 생장 환경 저장 테이블
