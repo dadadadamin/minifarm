@@ -1,8 +1,14 @@
+import java.util.Properties
+import java.io.FileInputStream
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
-
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
 android {
     namespace = "com.suda.agent"
     compileSdk = 35
@@ -23,7 +29,12 @@ android {
 //                abiFilters.add("arm64-v8a")
 //            }
 //        }
-
+        buildConfigField("String", "OPENAI_API_KEY", "\"${localProperties["OPENAI_API_KEY"]}\"")
+        buildFeatures {
+            viewBinding = true
+            // [추가 3] BuildConfig 기능 활성화
+            buildConfig = true
+        }
     }
     packaging {
         jniLibs {
@@ -92,4 +103,11 @@ dependencies {
     // Networking
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+
+    //cameraX libraries
+    val cameraVersion = "1.3.0"
+    implementation("androidx.camera:camera-core:$cameraVersion")
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
 }

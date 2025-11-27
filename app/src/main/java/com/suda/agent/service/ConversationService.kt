@@ -578,6 +578,33 @@ class ConversationService(
                         }
                     }
                 }
+                /*
+                else if (token == "<maum_7>") {
+                    Log.d(TAG, ">>> [Action] 병해충 진단 시작")
+                    // [수정] applicationContext -> context 로 변경
+                    if (!com.suda.agent.VisionController.isNetworkAvailable(context)) {
+                        ttsText = "현재는 온라인 연결해야 사용 가능합니다."
+                        Log.w(TAG, ">>> 병해충 진단 실패: 인터넷 연결 없음")
+                    }
+                    else {
+                        Log.d(TAG, ">>> 병해충 진단 시작 (인터넷 연결됨)")
+
+                        // [수정] applicationContext -> context 로 변경
+                        val photoFile = com.suda.agent.VisionController.takePhoto(context)
+
+                        if (photoFile != null) {
+                            Log.d(TAG, "📸 사진 촬영 완료, 서버 전송 중...")
+                            val diagnosisResult = com.suda.agent.VisionController.analyzeDisease(photoFile)
+                            ttsText = diagnosisResult
+                            Log.d(TAG, "✅ 진단 완료: $diagnosisResult")
+                        } else {
+                            ttsText = "카메라 촬영에 실패했습니다."
+                            Log.e(TAG, "❌ 사진 촬영 실패")
+                        }
+                    }
+                }
+*/
+
                 // 기타 (<maum_4> 등)
                 else {
                     ttsText = getSimpleTtsText(token, item.parameters)
